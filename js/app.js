@@ -171,3 +171,81 @@ const productosTienda = [
 let carrito = [];
 
 
+function mostrarProductosTienda() {
+    const contenedor = document.getElementById("productos");
+    if (!contenedor) return;
+
+    contenedor.innerHTML = "";
+    productosTienda.forEach(function(producto) {
+        const tarjeta = document.createElement("div");
+        const titulo = document.createElement("h3");
+        const precio = document.createElement("p");
+        const boton = document.createElement("button");
+
+        titulo.textContent = producto.nombre;
+        precio.textContent = "$" + producto.precio;
+        boton.textContent = "Agregar";
+
+        boton.addEventListener("click", function() {
+            agregarProducto(producto.id);
+        });
+
+        tarjeta.appendChild(titulo);
+        tarjeta.appendChild(precio);
+        tarjeta.appendChild(boton);
+        contenedor.appendChild(tarjeta);
+    });
+}
+
+
+function agregarProducto(id) {
+    const producto = productosTienda.find(function(item) {
+        return item.id === id;
+    });
+
+    const existente = carrito.find(function(item) {
+        return item.id === id;
+    });
+
+    if (existente) {
+        existente.cantidad++;
+    } else {
+        carrito.push({
+            id: producto.id,
+            nombre: producto.nombre,
+            precio: producto.precio,
+            cantidad: 1
+        });
+    }
+
+    mostrarCarrito();
+}
+
+
+function mostrarCarrito() {
+    const contenedor = document.getElementById("carrito");
+    if (!contenedor) return;
+
+    contenedor.innerHTML = "";
+    let total = 0;
+
+    carrito.forEach(function(producto) {
+        const subtotal = producto.precio * producto.cantidad;
+        total += subtotal;
+
+        const linea = document.createElement("p");
+        linea.textContent = producto.nombre + " - Cantidad: " + producto.cantidad + " - Subtotal: $" + subtotal;
+        contenedor.appendChild(linea);
+    });
+
+    const elemTotal = document.getElementById("total");
+    if (elemTotal) {
+        elemTotal.textContent = "Total: $" + total;
+    }
+}
+
+
+mostrarProductosTienda();
+mostrarCarrito();
+```[cite: 5, 7, 8, 9, 10, 11, 12, 13, 14]
+
